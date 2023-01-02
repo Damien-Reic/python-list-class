@@ -1,1 +1,1 @@
-No requirements needed for the python class
+No requirements needed for this python class
