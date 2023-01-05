@@ -1,4 +1,3 @@
-from decorator import decorator_with_log
 
 class Liste:
     class Element:
