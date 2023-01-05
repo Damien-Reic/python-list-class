@@ -1,8 +1,9 @@
+from decorator import decorator_with_log
 
 class Liste:
-
     class Element:
-        def __init__(self,element_before,element_after = None) -> None:
+        END = ' '
+        def __init__(self,element_before,element_after = END) -> None:
             self.element_before = element_before
             self.element_after = element_after
                     
@@ -13,16 +14,25 @@ class Liste:
         def __len__(chained_elements : "Liste.Element") -> int:
             return 0 if chained_elements.element_after is None else 1 + Liste.Element.__len__(chained_elements.element_after)
     
+        @staticmethod
+        def search_element(elements,index:int):
+            return elements.element_before if index == 0 else Liste.Element.search_element(elements.element_after,index-1)
+        
+        @staticmethod
+        def is_chained_empty(element:'Liste.Element'):
+            return element.element_after is Liste.Element.END
+
     
+
     def __init__(self,*args) -> None:
-        last = None
+        last = Liste.Element.END
         self.lenght  = -1
         for act_element in reversed(args):
             self.elements = Liste.Element(act_element,last)
             last = self.elements
             self.lenght += 1
         if len(args) == 0:
-            self.elements = Liste.Element(None)
+            self.elements = Liste.Element(Liste.Element.END)
             
 
     def __repr__(self) -> str:
@@ -32,6 +42,7 @@ class Liste:
     def __len__(self) -> int:
         return len(self.elements)
     
+
     
     def append(self, other) -> None:
         self.elements = Liste.Element(other,self.elements) 
@@ -46,12 +57,14 @@ class Liste:
     def is_empty(self) -> bool:
         return self.elements.element_after is None
 
-     
+    def element(self,index:int):
+        if self.lenght < index:
+            raise IndexError('list index out of range')
+        return Liste.Element.search_element(self.elements,index)
                
-a = Liste('laa',1124,71,'asas')
+    def is_empty(self) -> bool:
+        return Liste.Element.is_chained_empty(self.elements)
+    
 
-print(a)
-print(len(a))
-         
 
 
